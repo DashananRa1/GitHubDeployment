@@ -5,13 +5,13 @@ on:
 
   push:
     branches:
-      - 'feature/RJChanges/**'
+      - 'feature/RJ/**'
 
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - develop
-      - 'feature/RJChanges/**'
+      - 'feature/RJ/**'
 
 jobs:
   setup:
@@ -31,7 +31,7 @@ jobs:
 
           echo "Branch detected: $BRANCH"
 
-          if [[ "$BRANCH" == feature/RJChanges/* || "$BRANCH" == "develop" ]]; then
+          if [[ "$BRANCH" == feature/RJ/* || "$BRANCH" == "develop" ]]; then
             echo "env_name=QA"              >> $GITHUB_OUTPUT
             echo "test_level=RunLocalTests" >> $GITHUB_OUTPUT
 
@@ -57,8 +57,8 @@ jobs:
     needs: setup
     environment: env
     if: |
-      (github.event_name == 'create' && startsWith(github.ref, 'refs/heads/feature/RJChanges/')) ||
-      (github.event_name == 'push'   && startsWith(github.ref, 'refs/heads/feature/RJChanges/')) ||
+      (github.event_name == 'create' && startsWith(github.ref, 'refs/heads/feature/RJ/')) ||
+      (github.event_name == 'push'   && startsWith(github.ref, 'refs/heads/feature/RJ/')) ||
       (github.event_name == 'pull_request' && github.event.action != 'closed' &&
         startsWith(github.head_ref, 'feature/') && github.base_ref == 'develop') ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true &&
@@ -94,7 +94,7 @@ jobs:
     if: |
       needs.validate-qa.result == 'success' &&
       (
-        (github.event_name == 'create' && startsWith(github.ref, 'refs/heads/feature/RJChanges/')) ||
+        (github.event_name == 'create' && startsWith(github.ref, 'refs/heads/feature/RJ/')) ||
         (github.event_name == 'pull_request' && github.event.pull_request.merged == true &&
           startsWith(github.head_ref, 'feature/') && github.base_ref == 'develop')
       )
