@@ -9,7 +9,16 @@ public class RJ_LeadDAOLayer extends RJ_BaseDAOLayer{
         System.debug('===== RJ_LeadDAOLayer.getLeadsByEmail START =====');
         System.debug('Emails Received : ' + emails);
         System.debug('Email Count : ' + emails.size());
-        string soql = 'SELECT Id, Name, Email, Status, Company FROM Lead WHERE Email IN :emails WITH SECURITY_ENFORCED';
+       // string soql = 'SELECT Id, Name, Email, Status, Company FROM Lead WHERE Email IN :emails WITH SECURITY_ENFORCED';
+        String soql ='SELECT Id, Name, Email, Status, Company ' +
+                     'FROM Lead ' +
+                     'WHERE Email IN (\'' +
+                     String.join(
+                        new List<String>(emails),
+                        '\',\''
+                    ) +
+                    '\') ' +
+                    'WITH SECURITY_ENFORCED';
         System.debug('Generated SOQL : ' + soql);
         System.debug('Calling executeQuery with cache key = ByEmail');
         List<Lead> result =
